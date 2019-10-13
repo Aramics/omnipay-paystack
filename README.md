@@ -14,7 +14,7 @@ refer to the API docs here: http://developer.paystack.com/
 Via Composer
 
 ``` bash
-$ composer require Aramics/omnipay-paystack
+$ composer require aramics/omnipay-paystack
 ```
 
 ## Basic Usage
