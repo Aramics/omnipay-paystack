@@ -5,7 +5,6 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/0b7329e3c725e30c4344/maintainability)](https://codeclimate.com/github/Aramics/omnipay-paystack/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/0b7329e3c725e30c4344/test_coverage)](https://codeclimate.com/github/Aramics/omnipay-paystack/test_coverage)
 [![Style CI](https://styleci.io/repos/121246094/shield)](https://styleci.io/repos/121246094/shield)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Aramics/omnipay-paystack/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Aramics/omnipay-paystack/?branch=master)
 
 [Omnipay](https://github.com/thephpleague/omnipay) is a framework agnostic, multi-gateway payment
 processing library for PHP. This package implements Paystack support for Omnipay. https://paystack.com/
