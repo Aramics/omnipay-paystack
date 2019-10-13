@@ -30,12 +30,12 @@ $url = Omnipay::create('Paystack')
         'your_key', 
         'your_secret'
     )
-    ->setCallbackUrl('https://example.com/callback')
+    ->setCallbackUrl('https://domain.com/paymentdone/confirm')
     ->getUrl(
-        'test@example.com',
+        'customermail@domain.com',
         'my_reference',
         'description',
-        100
+        100 //amount
     );
 ```
 
@@ -53,9 +53,9 @@ $status = Omnipay::create('Paystack')
         'your_secret'
     )
     ->getTransactionStatus(
-        $_GET['paystack_notification_type'],
-        $_GET['paystack_transaction_tracking_id'],
-        $_GET['paystack_merchant_reference']
+        $_REQUEST['paystack_notification_type'],
+        $_REQUEST['paystack_transaction_tracking_id'],
+        $_REQUEST['paystack_merchant_reference']
     );
 ```
 3) `$status` will be either `PENDING`, `COMPLETED`, `FAILED` or `INVALID`. Handle these statuses in your application workflow accordingly.
