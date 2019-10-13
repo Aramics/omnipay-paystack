@@ -1,5 +1,5 @@
 {
-  "name": "Aramics/omnipay-paystack",
+  "name": "aramics/omnipay-paystack",
   "type": "library",
   "description": "Paystack gateway for Omnipay payment processing library",
   "keywords": [
@@ -11,12 +11,12 @@
     "paystack",
     "purchase"
   ],
-  "homepage": "https://github.com/Aramics/omnipay-paystack",
+  "homepage": "https://github.com/aramics/omnipay-paystack",
   "license": "MIT",
   "authors": [
     {
-      "name": "ROAM - Ringier Aramics",
-      "email": "oamdev@roam.africa"
+      "name": "Aramics",
+      "email": "madandola@ankabit.com"
     }
   ],
   "autoload": {
