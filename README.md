@@ -24,7 +24,7 @@ $ composer require aramics/omnipay-paystack
 ```php
 use Omnipay\Omnipay;
 
-$url = Omnipay::create('Paystack')
+$pay = Omnipay::create('Paystack')
     ->setSecretKey('YOUR_SECRET_KEY');
     ->purchase([
             'amount' => 2000,
@@ -33,6 +33,9 @@ $url = Omnipay::create('Paystack')
             'cancelUrl' => 'https://canclecallback',
             'returnUrl' => 'https://yourcallback',
         ]);
+if ($pay->isRedirect()) { 
+   $pay->redirect(); //redirect to pay on paystack
+}
 ```
 
 ### Check transaction status (from the Paystack ipn)
@@ -49,6 +52,9 @@ $status = Omnipay::create('Paystack')
                 'transactionId' => 'transId',
             ])
       ->send();
+if ($status->isSuccessful()) {
+    //give value to user
+}
 ```
 3) `$status` will be either paystack verify transaction object . Handle these statuses in your application workflow accordingly.
 
