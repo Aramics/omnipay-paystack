@@ -25,17 +25,14 @@ $ composer require aramics/omnipay-paystack
 use Omnipay\Omnipay;
 
 $url = Omnipay::create('Paystack')
-    ->setCredentials(
-        'your_key', 
-        'your_secret'
-    )
-    ->setCallbackUrl('https://domain.com/paymentdone/confirm')
-    ->getUrl(
-        'customermail@domain.com',
-        'my_reference',
-        'description',
-        100 //amount
-    );
+    ->setSecretKey('YOUR_SECRET_KEY');
+    ->purchase([
+            'amount' => 2000,
+            'transactionId' => 'transId',
+            'currency' => 'NGN',
+            'cancelUrl' => 'https://canclecallback',
+            'returnUrl' => 'https://yourcallback',
+        ]);
 ```
 
 ### Check transaction status (from the Paystack ipn)
@@ -47,15 +44,11 @@ $url = Omnipay::create('Paystack')
 use Omnipay\Omnipay;
 
 $status = Omnipay::create('Paystack')
-    ->setCredentials(
-        'your_key', 
-        'your_secret'
-    )
-    ->getTransactionStatus(
-        $_REQUEST['paystack_notification_type'],
-        $_REQUEST['paystack_transaction_tracking_id'],
-        $_REQUEST['paystack_merchant_reference']
-    );
+    ->setSecretKey('YOUR_SECRET_KEY');
+    ->completePurchase([
+                'transactionId' => 'transId',
+            ])
+      ->send();
 ```
-3) `$status` will be either `PENDING`, `COMPLETED`, `FAILED` or `INVALID`. Handle these statuses in your application workflow accordingly.
+3) `$status` will be either paystack verify transaction object . Handle these statuses in your application workflow accordingly.
 
