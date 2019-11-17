@@ -10,20 +10,45 @@ class AuthorizeRequest extends AbstractRequest
     /**
      * @var string
      */
-    static protected $endpoint = 'https://api.paystack.co/transaction/initialize';
-
+    static protected $base_url = 'https://api.paystack.co/transaction/';
+    protected $endpoint = 'initialize';
+    var $secretKey;
     /**
      * @inheritdoc
      */
     public function getData()
     {
-        $this->validate('email', 'amount');
+        $data =[];
+        if(isset($this->getParameters()['transactionReference'])){
+            $this->endpoint = 'verify/'.$this->getParameter('transactionReference');
+            $data['reference'] = $this->getParameter('transactionReference');
+            $data['transactionReference'] = $data['reference'];
+        }
 
-        $data['email'] = $this->getEmail();
-        $data['amount'] = $this->getAmount();
-        $data['callback_url'] = $this->getReturnUrl();
 
+        if($this->endpoint == 'initialize'){
+            $this->validate('email', 'amount');
+        
+
+            $data['email'] = $this->getEmail();
+            $data['amount'] = $this->getAmount();
+            $data['callback_url'] = $this->getReturnUrl();
+
+        }
         return $data;
+    }
+
+    public function getUrl($data){
+        $endpoint = isset($data['reference']) ? 'verify/'.$data['reference']:'initialize';
+        $this->endpoint = $endpoint;
+        return static::$base_url.$endpoint;
+    }
+
+    public function getHttpMethod($data)
+    {
+        if(isset($data['reference']))
+            return 'GET';
+        return 'POST';
     }
 
     /**
@@ -31,17 +56,23 @@ class AuthorizeRequest extends AbstractRequest
      */
     public function sendData($data)
     {
-        $this->httpRequest->headers->add([
-            'authorization' => 'Bearer ' . $this->getSecret(),
+        $headers = [
+            'authorization' => 'Bearer ' . $this->getSecret($data),
             'content-type' => 'application/json',
             'cache-control' => 'no-cache',
-        ]);
+        ];
 
-        return $this->response = new AuthorizeResponse(
-            $this,
-            $data,
-            static::$endpoint
-        );
+        $body = json_encode($data);
+        $httpResponse = $this->httpClient->request($this->getHttpMethod($data), $this->getUrl($data), $headers, $body);
+        return $this->createResponse($httpResponse->getBody()->getContents(), $httpResponse->getHeaders());
+
+        
+    }
+
+    protected function createResponse($data, $headers = [])
+    {
+        
+        return $this->response = new Response($this, $data, $headers);
     }
 
     /**
@@ -64,8 +95,9 @@ class AuthorizeRequest extends AbstractRequest
 
     protected function getSecret()
     {
-        return $this->getTestMode()
-            ? 'pk_test_adeb5992925c218ba85317cbf7a87236f496ad53'
-            : 'pk_test_adeb5992925c218ba85317cbf7a87236f496ad53';
+        return $this->secretKey;
+    }
+    public function setSecretKey($secretKey){
+        $this->secretKey = $secretKey;
     }
 }
